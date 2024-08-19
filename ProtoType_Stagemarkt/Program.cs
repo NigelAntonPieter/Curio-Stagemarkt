@@ -1,3 +1,7 @@
+using Microsoft.EntityFrameworkCore;
+using ProtoType_Stagemarkt.Models;
+using System;
+
 namespace ProtoType_Stagemarkt
 {
     public class Program
@@ -9,13 +13,20 @@ namespace ProtoType_Stagemarkt
             // Add services to the container.
             builder.Services.AddControllersWithViews();
 
+            using var db = new Appdbcontext();
+            db.Database.EnsureDeleted();
+            db.Database.EnsureCreated();
+
+            builder.Services.AddControllers();
+            builder.Services.AddDbContext<Appdbcontext>();
+            builder.Services.AddEndpointsApiExplorer();
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
             if (!app.Environment.IsDevelopment())
             {
                 app.UseExceptionHandler("/Home/Error");
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
 
